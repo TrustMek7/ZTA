@@ -120,6 +120,8 @@ Comprueba también el bucket administrado por SAM, CloudFront, Cognito, logs, ta
 
 ## Documentación
 
+- [Informe técnico final y paso a paso](docs/informe/informe-final.md), [Word editable](docs/informe/informe-final.docx) y [PDF](docs/informe/SUBGRUPO_LD.3_GUIA_04_Chino_Cusilayme_MamaniM_MamaniU.pdf), con capturas revisadas y reportes de la ejecución real.
+
 - [Requisitos originales](requirements.md) y [diseño del curso](design.md).
 - [Guía de trabajo](.agents/guia.md) y [decisiones](.agents/decisiones.md).
 - [OpenAPI 3.1](docs/api.yaml), [amenazas y mapeo NIST](docs/threat-model.md).

@@ -8,12 +8,12 @@ p = out / 'informe-final.md'
 s = p.read_text(encoding='utf-8')
 start = s.index('**Informe')
 end = s.index('## 1. Resumen')
-s = s[:start] + '''**Informe técnico de implementación, despliegue y validación**  
-Universidad Nacional de San Agustín de Arequipa — EPIS  
-Asignatura: Tópicos Avanzados en Ingeniería de Software  
-Práctica: Plataforma de Donaciones Segurida - AQP-SOLIDARIA  
-Docente: Mg. Robert Edison Arisaca Mamani  
-Integrantes: Cusilayme García José Luis; Joel Antonio Chino Pari; Mamani Mamani Alexis Baltazar; Mamani Uscamayta Agustín David  
+s = s[:start] + '''**Informe técnico de implementación, despliegue y validación**<br>
+Universidad Nacional de San Agustín de Arequipa — EPIS<br>
+Asignatura: Tópicos Avanzados en Ingeniería de Software<br>
+Práctica: Plataforma de Donaciones Segurida - AQP-SOLIDARIA<br>
+Docente: Mg. Robert Edison Arisaca Mamani<br>
+Integrantes: Cusilayme García José Luis; Joel Antonio Chino Pari; Mamani Mamani Alexis Baltazar; Mamani Uscamayta Agustín David<br>
 Fecha: 12 de noviembre de 2026
 
 Word y PDF utilizan la plantilla de laboratorio proporcionada por el equipo. La retroalimentación se conserva en blanco para el docente. El número de práctica y la hora de presentación no fueron indicados: se señalan como por asignar y por definir. Las referencias de revisión por pares deben completarse con datos reales.

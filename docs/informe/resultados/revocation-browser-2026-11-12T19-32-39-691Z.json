@@ -1,0 +1,25 @@
+{
+  "test": "T13",
+  "checks": [
+    {
+      "phase": "Antes de revocar",
+      "status": 200,
+      "timestamp": "2026-11-12T19:33:46.441Z"
+    },
+    {
+      "phase": "Despues de revocar y antes de expirar",
+      "status": 200,
+      "timestamp": "2026-11-12T19:33:47.496Z"
+    },
+    {
+      "phase": "Despues de expirar",
+      "status": 401,
+      "timestamp": "2026-11-12T19:43:55.123Z"
+    }
+  ],
+  "revocationHttpStatus": 200,
+  "revokedRefreshStatus": 400,
+  "revokedRefreshError": "invalid_grant",
+  "passed": true,
+  "finishedAt": "2026-11-12T19:43:55.123Z"
+}

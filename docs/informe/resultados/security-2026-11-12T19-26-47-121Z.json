@@ -1,0 +1,100 @@
+{
+  "run": "2026-11-12T19-26-47-121Z",
+  "startedAt": "2026-11-12T19:26:47.121Z",
+  "projectIds": [
+    "6177af6e-5d6c-4663-bb55-6434198d23cb"
+  ],
+  "donationIds": [
+    "aeec6f89-0fcc-44a2-8c31-ad23071b14a4",
+    "c9a5489f-0b94-492d-af66-8636c9148da5"
+  ],
+  "tests": [
+    {
+      "name": "T01: borrador oculto y catálogo público",
+      "status": "PASS"
+    },
+    {
+      "name": "T02: sin token no se puede donar",
+      "status": "PASS"
+    },
+    {
+      "name": "T03: donante no crea proyectos",
+      "status": "PASS"
+    },
+    {
+      "name": "T04: montos inválidos y clave obligatoria",
+      "status": "PASS"
+    },
+    {
+      "name": "T05: intención pendiente sin incremento",
+      "status": "PASS"
+    },
+    {
+      "name": "T06: misma clave devuelve la misma intención",
+      "status": "PASS"
+    },
+    {
+      "name": "T07: misma clave y otro monto devuelve conflicto",
+      "status": "PASS"
+    },
+    {
+      "name": "T09: donante 2 no consulta ni confirma una donación ajena",
+      "status": "PASS"
+    },
+    {
+      "name": "T12: gestor no consulta historial de donantes",
+      "status": "PASS"
+    },
+    {
+      "name": "T11-firma: token alterado rechazado",
+      "status": "PASS"
+    },
+    {
+      "name": "T11-ID-token: ID token rechazado como Bearer",
+      "status": "PASS"
+    },
+    {
+      "name": "T08: diez confirmaciones paralelas, un solo incremento",
+      "status": "PASS",
+      "statuses": [
+        200,
+        409,
+        409,
+        409,
+        409,
+        409,
+        409,
+        409,
+        409,
+        409
+      ],
+      "incrementCents": 100
+    },
+    {
+      "name": "CA-06.3: rechazo sin incrementar acumulado",
+      "status": "PASS"
+    },
+    {
+      "name": "HU-07: historial incluye una sola intención para la clave repetida",
+      "status": "PASS"
+    },
+    {
+      "name": "T10",
+      "status": "PENDING",
+      "reason": "Requiere comprobación de permisos efectivos del rol de listado en AWS."
+    },
+    {
+      "name": "T13",
+      "status": "PENDING",
+      "reason": "Requiere revocar refresh token y comprobar acceso antes y después de expirar."
+    },
+    {
+      "name": "T14",
+      "status": "PENDING",
+      "reason": "Requiere evidencia de que Cognito no entrega tokens al gestor sin completar TOTP."
+    }
+  ],
+  "executionCompleted": true,
+  "allRequirementsVerified": false,
+  "finishedAt": "2026-11-12T19:27:12.557Z"
+}

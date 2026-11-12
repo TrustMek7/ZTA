@@ -1,5 +1,9 @@
 # Avance cloud reportado por el titular
 
+**Cierre T13:** `revocation-browser-2026-11-12T19-32-39-691Z.json` terminó PASS: revocación HTTP 200, refresh revocado HTTP 400 (`invalid_grant`), access token 200 antes y después de revocar mientras era válido y 401 tras expirar. Junto con T14 y el simulador IAM de T10, se resuelven los marcadores externos del script principal sin modificar sus reportes originales.
+
+**Registro cronológico.** Las secciones siguientes describen etapas previas, incluidos fallos luego corregidos. Consultar [informe final](../docs/informe/informe-final.md) para el estado consolidado: tras a7bc403 se repitió la suite autenticada con 14 PASS y cero FAIL, incluidos ID token 401 y firma alterada 401; ocho comprobaciones públicas también pasaron. El auditor consultó eventos y T14 se comprobó en un navegador nuevo. La repetición independiente de T13 se adjunta al informe al terminar la espera de expiración.
+
 Estos resultados provienen de las salidas y capturas compartidas durante la ejecución supervisada, no de acceso del agente a la cuenta. Los reportes originales permanecen en `.artifacts/` de CloudShell; adjuntarlos sanitizados antes de cerrar la entrega.
 
 ## Seguridad

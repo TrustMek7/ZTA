@@ -1,0 +1,87 @@
+{
+  "alcance": "Casos T01-T14; no implica todos los RNF ni extensiones",
+  "codigoCorregido": "a7bc403",
+  "suiteAutenticadaPass": 14,
+  "suiteAutenticadaFail": 0,
+  "casos": [
+    {
+      "caso": "T01",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T02",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T03",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T04",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T05",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T06",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T07",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T08",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T09",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T10",
+      "estado": "PASS",
+      "evidencia": "iam-t10-transcripcion.json",
+      "procedencia": "IAM Policy Simulator reportado por el titular"
+    },
+    {
+      "caso": "T11",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T12",
+      "estado": "PASS",
+      "evidencia": "security-2026-11-12T19-26-47-121Z.json"
+    },
+    {
+      "caso": "T13",
+      "estado": "PASS",
+      "evidencia": "revocation-browser-2026-11-12T19-32-39-691Z.json"
+    },
+    {
+      "caso": "T14",
+      "estado": "PASS",
+      "evidencia": "session-checks-2026-11-12T19-28-01-267Z.json / T14"
+    }
+  ],
+  "casosPendientes": 0,
+  "controlesOperativosSinAcreditar": [
+    "AWS Budgets",
+    "CloudTrail y rechazo CloudWatch",
+    "Revision completa WCAG",
+    "Revision PR y CI remoto",
+    "Limpieza AWS posterior a evaluacion"
+  ]
+}

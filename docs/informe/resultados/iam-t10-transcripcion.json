@@ -1,0 +1,19 @@
+{
+  "test": "T10",
+  "procedencia": "Salida final proporcionada por el titular en la conversacion; transcripcion de los campos pertinentes, no ejecucion local del agente",
+  "contexto": {
+    "aws:RequestedRegion": "us-east-2"
+  },
+  "acciones": [
+    {
+      "accion": "dynamodb:GetItem",
+      "resultado": "allowed"
+    },
+    {
+      "accion": "dynamodb:PutItem",
+      "resultado": "implicitDeny"
+    }
+  ],
+  "contextoFaltante": [],
+  "AllowedByOrganizations": true
+}

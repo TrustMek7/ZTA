@@ -15,7 +15,9 @@ Corrección posterior: se agregaron 3 pruebas offline de la plantilla transforma
 - `sam validate --lint -t infra/template.yaml`: verificación estática de plantilla.
 - `sam build -t infra/template.yaml`: empaquetado de funciones, sin despliegue.
 
-## Pendiente de despliegue y revisión humana
+## Registro histórico anterior a la repetición final
+
+El estado vigente está en [el informe técnico](../docs/informe/informe-final.md) y sus reportes `resultados/`. La repetición posterior a a7bc403 aprobó 14 comprobaciones autenticadas y ocho públicas. T10 se verificó con IAM Policy Simulator; T14 se observó en navegador con contexto nuevo. La tabla que sigue conserva el estado anterior y no representa los resultados finales.
 
 Actualización del avance supervisado: el usuario confirmó el despliegue en us-east-2, la publicación de la SPA y los flujos de creación/publicación, confirmación/rechazo e historial. No se almacenan sus capturas de Cognito ni identificadores personales. La tabla siguiente conserva las verificaciones de aceptación que deben acreditarse formalmente; los resultados funcionales reportados no equivalen a completar cada T01–T14.
 

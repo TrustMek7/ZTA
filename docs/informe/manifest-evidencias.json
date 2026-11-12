@@ -1,0 +1,152 @@
+[
+  {
+    "archivo": "01-cloudshell-versiones.png",
+    "origen": "Capt.docx / word/media/image42.png",
+    "sha256": "3e0562494af1b53b6e294e37e941984e812ad8fcedc33fe0284686c08f17b94a",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "02-node24.png",
+    "origen": "Capt.docx / word/media/image2.png",
+    "sha256": "dc65276c2c4125268fcc92461e01d290e3bb8d1d21d7f036124950d629027f4e",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "03-carga-archivos.png",
+    "origen": "Capt.docx / word/media/image18.png",
+    "sha256": "eabf3ccfb2aa47cf20060c063a3f50c97d84a4ba06709ffd1d7485c3b337508b",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "04-build-sam.png",
+    "origen": "Capt.docx / word/media/image26.png",
+    "sha256": "c0b25f02bbecfcbfb2eccad3581deccca696ab79eb30bcc2495fe1f29ab18fb5",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "05-despliegue-guiado.png",
+    "origen": "Capt.docx / word/media/image16.png",
+    "sha256": "d49a97de47e3f1d58cfa977bd405f3d1de814aa65129ad8b284c1df0a1dfafb3",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "06-primer-despliegue.png",
+    "origen": "Capt.docx / word/media/image15.png",
+    "sha256": "084e168b93538c5a3ee3b1b37015ec5cc2a445c54f45eb048b8af751c6bbe693",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "07-cambio-contrasena.png",
+    "origen": "Capt.docx / word/media/image33.png",
+    "sha256": "48efb4d1f98128f16ae62ad661de6d555a9213115b3cf7f33554c50d9596d222",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "08-crear-proyecto.png",
+    "origen": "Capt.docx / word/media/image37.png",
+    "sha256": "045c8d4b32e7ba1023ea10f419f43f87aaa821a2151ce6fe036a8212dd32b3d3",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "09-publicacion.png",
+    "origen": "Capt.docx / word/media/image28.png",
+    "sha256": "d8825dfa14f8651125474e4231ec740f3185b1961699dde611c348fac7247d31",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "10-aporte-formulario.png",
+    "origen": "Capt.docx / word/media/image44.png",
+    "sha256": "2df4f4e9f0a8aaeca42ec5438fffe1f1cf466927e540fb904d493dd57b8dc4ec",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "11-aporte-confirmado.png",
+    "origen": "Capt.docx / word/media/image43.png",
+    "sha256": "be84523b7e458b66863013894d9bcd32fee50cae8cff659d3abb401e551b8d90",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "12-aporte-rechazado.png",
+    "origen": "Capt.docx / word/media/image25.png",
+    "sha256": "2ebc651741202db7077b511ff194058a54470dc6a3415413599aa4efa3e51be6",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "13-historial.png",
+    "origen": "Capt.docx / word/media/image7.png",
+    "sha256": "29ef4e4c921c23b8b003cb02f14d6fde9650381e924c201b6945592212c72ddb",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "14-suite-inicial.png",
+    "origen": "Capt.docx / word/media/image19.png",
+    "sha256": "bed43d6476d4715f5b9e1494fa3de1316d3e997ecb3d4497314ba41fdb2843ca",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "15-catalogo-rendimiento.png",
+    "origen": "Capt.docx / word/media/image34.png",
+    "sha256": "d379d99bb1e24ac0662962738dc64984687b64826cc06f7d6df13a74ff432aad",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "16-cloudwatch.png",
+    "origen": "Capt.docx / word/media/image3.png",
+    "sha256": "090d0ecd1979c9c3544ef44b222f2abfdb37b5def0916310b159b39ad7971fcc",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "17-desafio-mfa.png",
+    "origen": "Capt.docx / word/media/image23.png",
+    "sha256": "70ae756a48d25832821285c45895475f13efa4d214966e9cb97581f9ad39a3d5",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "18-revocacion.png",
+    "origen": "Capt.docx / word/media/image5.png",
+    "sha256": "7d5b9eb919be8b0096264b27be355ab144da3df8a5a17ec25185c345b746fbe1",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "auditor-resultado-despues-correccion.png",
+    "origen": "Captura de aplicacion autorizada, navegador efimero",
+    "sha256": "fffd89f2eb25963ce692fb0685f946a8239b7b03e6ff2d856f65348cfc4e2ecf",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "auditor-gestion-restringida.png",
+    "origen": "Captura de aplicacion autorizada, navegador efimero",
+    "sha256": "dea772da8276b04907865077028e9f525441d8937c7326f0f5c7bffa01b3a1d5",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "auditor-historial-restringido.png",
+    "origen": "Captura de aplicacion autorizada, navegador efimero",
+    "sha256": "dea772da8276b04907865077028e9f525441d8937c7326f0f5c7bffa01b3a1d5",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "donante-1-historial-mobile.png",
+    "origen": "Captura de aplicacion autorizada, navegador efimero",
+    "sha256": "cd3288dd7d2af25c7203cd73a1749da810a5cf52e85ada76945646925c4b8ecd",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "t14-desafio-controlado.png",
+    "origen": "Captura de aplicacion autorizada, navegador efimero",
+    "sha256": "1460d104bd7d6492d6c3e1c073642abcd7d4d95f9d1da527a2c39c61659d2513",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "19-cloudwatch-sin-init.png",
+    "origen": "Captura proporcionada en la conversacion: codex-clipboard-dMyzy8.png",
+    "sha256": "373729c0fc0a4bb407aa9d50265a62d2595123a74fbcaca8216985927397f380",
+    "transformaciones": "ninguna"
+  },
+  {
+    "archivo": "20-retencion-logs.png",
+    "origen": "Captura proporcionada en la conversacion: codex-clipboard-ek5nH4.png",
+    "sha256": "86128d1cc7c4cc570d93b65924832b838adc1570e65ece865c12bfa1ccae0783",
+    "transformaciones": "ninguna"
+  }
+]
