@@ -1,0 +1,5 @@
+@import "tailwindcss";
+:root { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #253e35; background: #faf8f3; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.bootstrap { max-width: 1000px; padding: 80px 24px; margin: auto; }
