@@ -17,6 +17,10 @@ Corrección posterior: se agregaron 3 pruebas offline de la plantilla transforma
 
 ## Pendiente de despliegue y revisión humana
 
+Actualización del avance supervisado: el usuario confirmó el despliegue en us-east-2, la publicación de la SPA y los flujos de creación/publicación, confirmación/rechazo e historial. No se almacenan sus capturas de Cognito ni identificadores personales. La tabla siguiente conserva las verificaciones de aceptación que deben acreditarse formalmente; los resultados funcionales reportados no equivalen a completar cada T01–T14.
+
+Los scripts de `scripts/cloud/` permiten ejecutar seguridad, carga hasta 50 publicados y medición. Véase `docs/cloud-tests.md`. La herramienta se probó localmente con transporte simulado; no se ha ejecutado contra la cuenta AWS desde el agente. Los reportes cloud deben generarlos el titular/equipo y revisarse antes de incorporarlos a la entrega.
+
 | Prueba | Estado y evidencia necesaria |
 |---|---|
 | T01 | Lógica local aprobada; guardar respuesta HTTPS sin borradores |

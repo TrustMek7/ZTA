@@ -96,6 +96,8 @@ Abre el output `FrontendUrl`. El bucket es privado y CloudFront accede mediante 
 
 ## Limitaciones y entrega académica
 
+Para las validaciones reales con gestor y dos donantes, consulta [scripts y procedimiento de pruebas cloud](docs/cloud-tests.md). Incluye carga de proyectos por API hasta 50 publicados, pruebas de seguridad y medición p95, con reportes sin credenciales. Su ejecución cloud corresponde al titular de la cuenta; no se presenta como ya realizada.
+
 - La revocación del refresh token no invalida inmediatamente el access token frente al JWT authorizer: puede aceptarse hasta expirar (10 minutos).
 - Catálogo e historial consultan índices eventualmente consistentes; puede existir una breve demora tras una escritura.
 - No hay postura de dispositivo ni evaluación continua de riesgo; no se declara una certificación Zero Trust.
