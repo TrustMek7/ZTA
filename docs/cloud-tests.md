@@ -68,6 +68,18 @@ El calentamiento no demuestra por sí solo que no hubo cold starts. El reporte c
 
 ## Pruebas y evidencias que siguen siendo necesarias
 
+### Prueba guiada T13
+
+```bash
+node scripts/cloud/revocation.mjs
+```
+
+El script pide un access token de DONANTE reciente, comprueba una lectura 200 y solicita cerrar sesión desde la app en ese mismo contexto de navegador. En Network con Preserve log activado para esta comprobación, verificar que `/oauth2/revoke` terminó correctamente antes de la navegación a logout; no copiar ni capturar el request body, porque contiene el refresh token. La captura de evidencia debe limitarse a URL sin parámetros sensibles y código de respuesta.
+
+Cuando el cierre haya terminado sin errores, escribir CERRADA en la terminal. El script comprueba que el JWT todavía se acepta antes de expirar y espera hasta 10 segundos después de su `exp` para comprobar HTTP 401. Informa el tiempo restante cada 30 segundos y guarda solamente horas/estados. No cerrar CloudShell mientras espera. No modifica donaciones ni guarda tokens. El resultado solo acredita la ventana observada del access token; adjuntar la evidencia sanitizada de la revocación real desde el navegador para cerrar T13.
+
+### Pendientes de evidencia manual
+
 | Criterio | Cómo completarlo |
 |---|---|
 | T10 | Comprobar con IAM Policy Simulator o prueba controlada que el rol PublicProjects no puede escribir en Projects. Las políticas administradas de la nueva cuenta pueden afectar permisos efectivos. No asignar permisos mayores para que la prueba pase. |
