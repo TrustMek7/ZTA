@@ -28,6 +28,14 @@ La nueva modalidad incorpora políticas administradas de acceso a recursos. Ante
 
 ## Antes del despliegue
 
+### Confirmar la región real del proyecto (nueva experiencia)
+
+En AWS Settings → Proyectos → el proyecto → Información general → Información adicional, consulta Región. No deducirla de la configuración del asistente, la región de CloudShell ni una recomendación del diseño. AWS asigna la región por el país de contacto; la documentación vigente incluye Perú en Ohio (`us-east-2`). Las políticas regionales de la organización pueden denegar CloudFormation en `us-east-1` aunque el servicio esté incluido en el plan.
+
+Un `AccessDenied` con `explicit deny in a service control policy` al crear `aws-sam-cli-managed-default` no demuestra por sí solo que SAM esté prohibido o que haya que pagar. Primero confirmar región y contexto del proyecto. Si el error persiste en su región asignada, investigar la política aplicable; no intentar eludirla ni añadir AdministratorAccess para contrarrestar un Deny.
+
+Al ejecutar `sam deploy --guided`, el prompt `SAM configuration file [samconfig.toml]` solicita un nombre de archivo: pulsa Enter para aceptar el valor. Responder `Y` ahí lo trata como nombre de archivo, no como confirmación.
+
 - Confirmar servicios compatibles con el plan y modalidad de cuenta, región única y controles de consumo.
 - Revisar con una persona distinta los permisos IAM, transacciones, código y plantilla.
 - Crear alertas de consumo apropiadas al plan. Las alertas no son un interruptor de gasto.
@@ -41,3 +49,5 @@ La nueva modalidad incorpora políticas administradas de acceso a recursos. Ante
 - MFA en AWS Settings: https://docs.aws.amazon.com/accounts/latest/reference/register-mfa-devices.html
 - MFA raíz clásico: https://docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html
 - Planes y créditos: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier-plans.html
+- Región asignada y ubicación donde consultarla: https://docs.aws.amazon.com/accounts/latest/reference/project-regions.html
+- Políticas administradas de proyectos: https://docs.aws.amazon.com/accounts/latest/reference/scps-and-rcps-for-projects.html

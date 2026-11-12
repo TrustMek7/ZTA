@@ -45,6 +45,8 @@ Las pruebas del navegador cubren catálogo, búsqueda, detalle, transparencia, r
 
 Lee [cuenta, MFA y modalidades de acceso](docs/aws-setup.md) antes de crear recursos. Confirma el plan gratuito, región, servicios disponibles y permisos efectivos. La nueva experiencia de AWS usa Builder ID y proyectos en lugar de un usuario raíz clásico; puede imponer políticas administradas que requieren revisar la prueba T10 con el docente.
 
+**Región:** los comandos de este README muestran `us-east-1` como ejemplo del diseño original. Antes de ejecutarlos en una cuenta con Builder ID, sustitúyela en todos los comandos por la región asignada que figure en AWS Settings → Proyectos → Información adicional. Para registros desde Perú, AWS documenta Ohio (`us-east-2`). La región que muestra CloudShell o el asistente no confirma por sí sola la región autorizada del proyecto.
+
 No subir `.env`, claves de acceso, JWT, QR ni códigos MFA. Los miembros del equipo deben revisar los controles de seguridad y los PR antes de la entrega académica. Los commits de este avance son locales, sin push.
 
 ### Despliegue supervisado del backend e infraestructura
