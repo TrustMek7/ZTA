@@ -92,3 +92,7 @@ Cuando el cierre haya terminado sin errores, escribir CERRADA en la terminal. El
 | GitHub y entrega | Push autorizado, CI ejecutado, PR revisados, informe y AI_USAGE completados por el equipo. |
 
 Ningún reporte del script debe interpretarse como cumplimiento de todo el proyecto si contiene PENDING o no se han reunido estas evidencias.
+
+## Capturas asistidas del navegador
+
+`node scripts/capture-browser.mjs` abre Chromium visible con un contexto temporal, sin usar perfiles existentes de Chrome ni persistir cookies, tokens, trazas o HAR. El usuario completa manualmente el inicio de sesión. La herramienta permite navegar por enlaces de la SPA conservando su sesión en memoria y guardar capturas de vistas de la aplicación en `.artifacts/capturas/`. Oculta los campos de formulario y bloquea capturas en Cognito y en el callback OAuth para no registrar contraseñas, QR ni códigos de autenticación. No reemplaza la captura manual sanitizada del desafío MFA ni las comprobaciones de API. En terminales que cierran stdin al lanzar el proceso, usar una sesión interactiva para mantener el navegador abierto.
