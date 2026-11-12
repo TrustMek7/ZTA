@@ -8,6 +8,11 @@ const browser = await chromium.launch({ headless: false });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
 let loginTokens;
+let requestedResource;
+page.on('request', request => {
+  const url = new URL(request.url());
+  if (url.origin === 'https://aqp-solidaria-jlc-2026.auth.us-east-2.amazoncognito.com' && url.pathname === '/oauth2/authorize') requestedResource = url.searchParams.get('resource');
+});
 page.on('response', async response => {
   try {
     const url = new URL(response.url());
@@ -40,7 +45,7 @@ try {
       } else if (command.startsWith('nav ')) {
         if (current.origin !== app) throw new Error('Completa primero el inicio de sesión manual.');
         const route = command.slice(4);
-        if (!['/', '/gestion', '/mis-donaciones', '/transparencia'].includes(route)) throw new Error('Ruta no permitida por esta herramienta de captura.');
+        if (!['/', '/gestion', '/mis-donaciones', '/transparencia', '/auditoria'].includes(route)) throw new Error('Ruta no permitida por esta herramienta de captura.');
         const link = page.locator(`a[href="${route}"]`).first();
         if (await link.count()) await link.click();
         else await page.evaluate(path => { window.history.pushState({}, '', path); window.dispatchEvent(new PopStateEvent('popstate')); }, route);
@@ -64,11 +69,14 @@ try {
       } else if (command === 'id-test') {
         if (!loginTokens?.access || !loginTokens?.id) throw new Error('Falta un inicio de sesión nuevo en este navegador.');
         const idClaims = JSON.parse(Buffer.from(loginTokens.id.split('.')[1], 'base64url').toString());
+        const accessClaims = JSON.parse(Buffer.from(loginTokens.access.split('.')[1], 'base64url').toString());
         if (idClaims.token_use !== 'id') throw new Error('La respuesta no incluye un ID token reconocible.');
-        const api = 'https://wqn3zzrxf5.execute-api.us-east-2.amazonaws.com/academic/v1/donations/me';
+        const auditor = accessClaims['cognito:groups']?.includes('AUDITOR');
+        const api = `https://wqn3zzrxf5.execute-api.us-east-2.amazonaws.com/academic/v1/${auditor ? 'audit' : 'donations/me'}`;
+        const expectedAccessStatus = auditor || accessClaims['cognito:groups']?.includes('DONANTE') ? 200 : 403;
         const access = await context.request.get(api, { headers: { Authorization: `Bearer ${loginTokens.access}` } });
         const identity = await context.request.get(api, { headers: { Authorization: `Bearer ${loginTokens.id}` } });
-        const evidence = { test: 'T11-ID-token', timestamp: new Date().toISOString(), accessTokenStatus: access.status(), idTokenStatus: identity.status(), idTokenUseVerified: true, passed: access.status() === 200 && identity.status() === 401 };
+        const evidence = { test: 'T11-ID-token', timestamp: new Date().toISOString(), requestedResource: requestedResource ?? null, accessAudience: accessClaims.aud ?? null, accessClientMatches: accessClaims.client_id === '4okr652l3t3fv8kcke51ioe18e', expectedAccessStatus, accessTokenStatus: access.status(), idTokenStatus: identity.status(), idTokenUseVerified: true, passed: access.status() === expectedAccessStatus && identity.status() === 401 };
         const { writeFile } = await import('node:fs/promises');
         await writeFile('.artifacts/capturas/t11-id-token.json', JSON.stringify(evidence, null, 2) + '\n');
         console.log(JSON.stringify(evidence));

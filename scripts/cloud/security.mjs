@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
+import { pathToFileURL } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { Client, endpoint, claims, token, secret, report, requireStatus, runId, sleep } from './common.mjs';
 
+export async function runSecurity(credentials = {}) {
 const api = new Client(endpoint()); const id = runId();
 const state = { run: id, startedAt: new Date().toISOString(), projectIds: [], donationIds: [], tests: [], executionCompleted: false, allRequirementsVerified: false };
 async function test(name, run) {
@@ -11,11 +13,11 @@ async function test(name, run) {
 function skip(name, reason) { state.tests.push({ name, status: 'PENDING', reason }); console.log(`PENDING ${name}: ${reason}`); }
 try {
   console.log('Esta prueba crea un proyecto de control y dos donaciones simuladas; la confirmación suma S/ 1.00 solo a ese proyecto. No modifica campañas existentes.');
-  const manager = await token('GESTOR', 'Access token del GESTOR');
-  const donor = await token('DONANTE', 'Access token del DONANTE 1');
-  const other = await token('DONANTE', 'Access token del DONANTE 2', true);
+  const manager = credentials.manager ?? await token('GESTOR', 'Access token del GESTOR');
+  const donor = credentials.donor ?? await token('DONANTE', 'Access token del DONANTE 1');
+  const other = credentials.other ?? await token('DONANTE', 'Access token del DONANTE 2', true);
   if (claims(manager).sub === claims(donor).sub || (other && claims(other).sub === claims(donor).sub)) throw new Error('Usa cuentas distintas para gestor y donantes. No cambies los grupos de una cuenta para simular dos identidades.');
-  const idToken = await secret('ID token del DONANTE 1 (opcional; Enter para dejar ese caso pendiente)');
+  const idToken = credentials.id ?? await secret('ID token del DONANTE 1 (opcional; Enter para dejar ese caso pendiente)');
   const input = { title: `[QA ${id}] Proyecto de seguridad`, description: 'Proyecto ficticio y aislado para comprobar autorización, integridad e idempotencia. No representa recaudación ni beneficiarios reales.', goalAmountCents: 100000 };
   const project = await api.ok('/projects', { method: 'POST', token: manager, body: input }, [201]);
   state.projectIds.push(project.projectId);
@@ -85,3 +87,6 @@ try {
   console.log(`Resultado: ${state.tests.filter(t => t.status === 'PASS').length} comprobaciones aprobadas, ${state.tests.filter(t => t.status === 'FAIL').length} fallidas y ${state.tests.filter(t => t.status === 'PENDING').length} pendientes. No acredita todos los requisitos.`);
 } catch (error) { state.error = error.message; process.exitCode = 1; console.error(error.message); }
 finally { state.finishedAt = new Date().toISOString(); console.log(`Reporte sin credenciales: ${await report(`security-${id}`, state)}`); }
+
+}
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await runSecurity();

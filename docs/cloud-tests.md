@@ -95,6 +95,14 @@ Ningún reporte del script debe interpretarse como cumplimiento de todo el proye
 
 ## Capturas asistidas del navegador
 
+### Repetición sin copiar tokens al chat
+
+`node scripts/browser-security.mjs` abre tres contextos efímeros para GESTOR, DONANTE 1 y DONANTE 2. El titular completa los logins. La herramienta conserva los tokens exclusivamente en memoria y ejecuta la misma suite `security.mjs`; crea un proyecto QA y dos intenciones simuladas. No adjunta credenciales al reporte.
+
+`node scripts/browser-session-checks.mjs` observa el desafío MFA del gestor, registra que todavía no se emitieron tokens y comprueba el grupo después del login. Su sección de cierre manual requiere que el donante no cierre sesión antes del aviso. Si ese orden no se cumple, se conserva evidencia parcial y no se aprueba T13.
+
+`node scripts/browser-revocation.mjs` ofrece una alternativa determinista para T13: el titular inicia sesión DONANTE y deja la ventana abierta. El proceso revoca el refresh token de esa misma sesión, verifica su rechazo al intentar renovarlo y contrasta el access token antes y después de expirar. La espera puede durar diez minutos. No guarda refresh tokens, JWT ni respuestas de autenticación.
+
 `node scripts/capture-browser.mjs` abre Chromium visible con un contexto temporal, sin usar perfiles existentes de Chrome ni persistir cookies, tokens, trazas o HAR. El usuario completa manualmente el inicio de sesión. La herramienta permite navegar por la SPA conservando su sesión en memoria y guardar capturas de vistas de la aplicación en `.artifacts/capturas/`. Oculta campos sensibles (contraseña, correo, teléfono y OTP), y bloquea capturas en Cognito y en el callback OAuth para no registrar contraseñas, QR ni códigos de autenticación. Los campos de proyectos y montos deben contener únicamente datos ficticios. No reemplaza la captura manual sanitizada del desafío MFA ni las comprobaciones de API. En terminales que cierran stdin al lanzar el proceso, usar una sesión interactiva para mantener el navegador abierto.
 
 Para la comprobación autorizada `id-test`, mantiene exclusivamente access token e ID token de la respuesta de Cognito en memoria del proceso; no guarda refresh tokens ni exporta almacenamiento del navegador. Con una sesión de DONANTE nueva, compara el acceso a `/donations/me`: access token debe responder 200 e ID token 401. Solo escribe estados HTTP, hora y resultado en `t11-id-token.json`, sin credenciales ni identidades. La ventana de gestor se puede mantener separada de otra ventana de donante. Los comandos `donate`, `confirm` y `reject` modifican datos de prueba: usarlos únicamente para los flujos académicos autorizados y en proyectos de QA, no para alterar campañas existentes.
