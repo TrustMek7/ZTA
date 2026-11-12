@@ -28,4 +28,8 @@ Las capturas mostraron registros de éxito en PublicProjects durante la medició
 
 ## Pendiente de entrega
 
+Durante las capturas asistidas se verificó directamente una sesión GESTOR y otra DONANTE 1. Se guardaron vistas de gestión, transparencia, formulario de aporte, pendiente/confirmado, historial en escritorio y 375 px, y bloqueo de Gestión para DONANTE en `.artifacts/capturas/` del equipo local. Se registró y confirmó S/ 1.00 adicional únicamente en el proyecto de seguridad de QA ya existente; no se crearon proyectos ni se alteró la campaña original. El proyecto de QA pasó de S/ 1.00 a S/ 2.00 confirmados; las 50 campañas publicadas se mantienen.
+
+La comprobación directa de T11-ID-token dio accessTokenStatus=200 e idTokenStatus=403, con token_use=id comprobado. Es un rechazo de credencial, pero no cumple el HTTP 401 exigido y por tanto permanece fallido. Se prepara corrección de resource binding con pruebas locales; el nuevo comportamiento no está acreditado hasta desplegar y repetir la prueba. Las capturas de UI no sustituyen evidencias API para T02–T12.
+
 Completar T11-ID-token, T13 y evidencia T14; confirmar región/condiciones del cliente; reunir reportes, logs 401/403, CloudTrail, presupuesto, accesibilidad y cabeceras; completar informe, revisión humana y CI remoto. La edición de proyectos y las extensiones declaradas pendientes en la auditoría de requisitos no quedan resueltas por estas pruebas. No se hace push ni se eliminan recursos desde el agente.

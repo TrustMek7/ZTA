@@ -1,4 +1,5 @@
 import { InMemoryWebStorage, UserManager, WebStorageStateStore, type User } from 'oidc-client-ts';
+import { API_AUDIENCE } from '../../../shared/auth-config';
 
 export const authConfigured = Boolean(import.meta.env.VITE_COGNITO_AUTHORITY && import.meta.env.VITE_COGNITO_CLIENT_ID && import.meta.env.VITE_COGNITO_DOMAIN);
 const domain = import.meta.env.VITE_COGNITO_DOMAIN?.replace(/\/$/, '');
@@ -9,6 +10,8 @@ export const manager = authConfigured ? new UserManager({
   post_logout_redirect_uri: window.location.origin,
   response_type: 'code',
   scope: 'openid email api/projects.write api/donations.write api/donations.read api/audit.read',
+  // RFC 8707: access token aud identifies this API; ID token aud stays the client ID.
+  extraQueryParams: { resource: import.meta.env.VITE_API_AUDIENCE || API_AUDIENCE },
   userStore: new WebStorageStateStore({ store: new InMemoryWebStorage() }),
   // Only the PKCE verifier and OAuth interaction state persist during redirect.
   stateStore: new WebStorageStateStore({ store: window.sessionStorage }),

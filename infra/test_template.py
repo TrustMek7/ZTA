@@ -50,6 +50,17 @@ class AcademicSimulationTest(unittest.TestCase):
         self.assertEqual(permission["FunctionName"], {"Ref": "Simulate"})
         self.assertTrue(permission["SourceArn"]["Fn::Sub"].endswith("${Api}/${Stage}/POST/v1/donations/*/simulate"))
 
+    def test_api_audience_is_distinct_from_client_id_and_scopes_remain_required(self):
+        template = self.transformed("academic")
+        body = template["Resources"]["Api"]["Properties"]["Body"]
+        jwt = body["components"]["securitySchemes"]["Cognito"]["x-amazon-apigateway-authorizer"]["jwtConfiguration"]
+        self.assertEqual(jwt["audience"], [{"Ref": "ApiAudience"}])
+        self.assertEqual(template["Parameters"]["ApiAudience"]["Default"], "https://aqp-solidaria.example/api")
+        self.assertEqual(body["paths"]["/v1/donations/me"]["get"]["security"], [{"Cognito": ["api/donations.read"]}])
+        env = template["Resources"]["History"]["Properties"]["Environment"]["Variables"]
+        self.assertEqual(env["API_AUDIENCE"], {"Ref": "ApiAudience"})
+        self.assertEqual(env["COGNITO_CLIENT_ID"], {"Ref": "UserPoolClient"})
+
 
 if __name__ == "__main__":
     unittest.main()

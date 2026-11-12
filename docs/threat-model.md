@@ -6,7 +6,7 @@ Navegador → API Gateway (JWT verificado, issuer/client/scopes) → Lambda (rol
 
 | Riesgo | Control implementado | Verificación |
 |---|---|---|
-| Suplantación de identidad | Cognito Code + PKCE; access token de 10 min; JWT authorizer y validación de token_use/client_id en Lambda | Claims inválidos unitarios; firma y login real pendientes en AWS |
+| Suplantación de identidad | Cognito Code + PKCE; access token de 10 min; resource binding para audiencia API; JWT authorizer y validación de token_use/client_id/aud en Lambda | Claims inválidos unitarios; completar prueba desplegada de audiencia y HTTP 401 para ID token |
 | Elevación de privilegios | Rol verificado en cada operación; TOTP obligatorio para todos los usuarios del pool | T03/T12 locales; segundo factor real pendiente |
 | Acceso horizontal | Historial por sub, detalle y simulación por propietario, 404 opaco | T09 local |
 | Alteración de importes | Esquemas estrictos, céntimos enteros, límites servidor | T04, CA-05.2 |

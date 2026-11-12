@@ -3,16 +3,17 @@ import { randomUUID } from 'node:crypto';
 import { handlers } from '../src/app';
 import type { Event } from '../src/shared/http';
 import { MemoryRepository } from './memory';
+import { API_AUDIENCE } from '../../shared/auth-config';
 
 const publishedId = randomUUID(); const draftId = randomUUID();
 const key = randomUUID();
 function event(body?: unknown, role = 'DONANTE', sub = 'donor-a', path: Record<string, string> = {}, extraClaims = {}): Event {
-  return { version: '2.0', rawPath: '/v1/donations', headers: { 'idempotency-key': key }, body: body === undefined ? undefined : JSON.stringify(body), pathParameters: path, requestContext: { requestId: 'test-request', http: { method: 'POST' }, authorizer: { jwt: { claims: { sub, token_use: 'access', client_id: 'test-client', exp: Math.floor(Date.now() / 1000) + 300, scope: 'api/projects.write api/donations.write api/donations.read api/audit.read', 'cognito:groups': `[${role}]`, ...extraClaims }, scopes: [] } } } } as unknown as Event;
+  return { version: '2.0', rawPath: '/v1/donations', headers: { 'idempotency-key': key }, body: body === undefined ? undefined : JSON.stringify(body), pathParameters: path, requestContext: { requestId: 'test-request', http: { method: 'POST' }, authorizer: { jwt: { claims: { sub, token_use: 'access', aud: API_AUDIENCE, client_id: 'test-client', exp: Math.floor(Date.now() / 1000) + 300, scope: 'api/projects.write api/donations.write api/donations.read api/audit.read', 'cognito:groups': `[${role}]`, ...extraClaims }, scopes: [] } } } } as unknown as Event;
 }
 let repo: MemoryRepository; let app: ReturnType<typeof handlers>;
 const decode = (r: { body?: string }) => JSON.parse(r.body!);
 beforeEach(() => {
-  vi.stubEnv('COGNITO_CLIENT_ID', 'test-client'); vi.stubEnv('STAGE', 'academic');
+  vi.stubEnv('COGNITO_CLIENT_ID', 'test-client'); vi.stubEnv('API_AUDIENCE', API_AUDIENCE); vi.stubEnv('STAGE', 'academic');
   vi.spyOn(console, 'log').mockImplementation(() => {});
   repo = new MemoryRepository(); app = handlers(repo);
   const fields = { title: 'Proyecto ficticio', description: 'Una descripción de prueba con suficiente información.', goalAmountCents: 100000, confirmedAmountCents: 0, currency: 'PEN' as const, createdAt: '2026-11-01T00:00:00Z', updatedAt: '2026-11-01T00:00:00Z' };
@@ -25,7 +26,7 @@ describe('Requisitos HU-01 a HU-09: reglas de servidor', () => {
     expect((await app.publicProjects(event(undefined, '', '', { projectId: draftId }))).statusCode).toBe(404);
   });
   it('T02 rechaza ausencia de identidad verificada', async () => { const e = event(); delete (e.requestContext as Partial<Event['requestContext']>).authorizer; expect((await app.createDonation(e)).statusCode).toBe(401); });
-  it.each([{ token_use: 'id' }, { client_id: 'other' }, { exp: 1 }, { exp: 'bad' }])('T11 / CA-03.2 rechaza claims inválidos %j', async claims => { expect((await app.createDonation(event({}, 'DONANTE', 'a', {}, claims))).statusCode).toBe(401); });
+  it.each([{ token_use: 'id' }, { client_id: 'other' }, { aud: undefined }, { aud: 'other-api' }, { aud: 'test-client' }, { exp: 1 }, { exp: 'bad' }])('T11 / CA-03.2 rechaza claims inválidos %j', async claims => { expect((await app.createDonation(event({}, 'DONANTE', 'a', {}, claims))).statusCode).toBe(401); });
   it('T03 bloquea a donante creando proyecto', async () => { expect((await app.manageProjects(event({}))).statusCode).toBe(403); expect(repo.events).toHaveLength(0); });
   it.each([0, -100, 99, 100001, 100.5, '100'])('T04 rechaza monto inválido %s', async amountCents => { expect((await app.createDonation(event({ projectId: publishedId, amountCents }))).statusCode).toBe(400); expect(repo.donationRows.size).toBe(0); });
   it('CA-05.2 exige UUID de idempotencia y rechaza atributos extra', async () => {

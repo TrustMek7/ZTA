@@ -33,3 +33,15 @@ Referencias generales:
 - https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-controlling-access-to-apis.html
 - https://authts.github.io/oidc-client-ts/interfaces/OidcClientSettings.html
 - https://authts.github.io/oidc-client-ts/classes/InMemoryWebStorage.html
+
+## T11: rechazo de ID token con HTTP 401
+
+En la comprobación autenticada del navegador de pruebas, el access token de DONANTE obtuvo 200 en /donations/me y el ID token real obtuvo 403. El dato queda registrado como fallo de contrato HTTP, no como acceso indebido ni como prueba aprobada. Con una audiencia igual al app client, el ID token supera firma/audiencia y se rechaza después por falta de scopes: el authorizer nativo responde 403.
+
+Se prepara resource binding (RFC 8707): la SPA solicita `resource=https://aqp-solidaria.example/api`, Cognito incluye esa URL en aud del access token y conserva el client ID en aud del ID token. El JWT authorizer acepta únicamente la audiencia de la API; Lambda además exige el client_id esperado, token_use=access y aud correcto. Se mantienen scopes, PKCE y controles de rol/propietario. El dominio .example es un identificador, no un endpoint ni un servicio que deba contratarse. Los refresh tokens mantienen la audiencia original según Cognito.
+
+Esto corrige la premisa del diseño inicial de que los access tokens nunca incluyen aud: no lo incluyen por defecto, pero sí al solicitar resource binding. La validación de client_id sigue siendo obligatoria en Lambda porque API Gateway evalúa aud prioritariamente si está presente. Los requisitos originales no se reescriben para dar por bueno un 403; el cambio debe desplegarse y T11 repetirse antes de cerrarlo. Las sesiones antiguas necesitan un nuevo inicio de sesión para obtener tokens vinculados a la API.
+
+- https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html
+- https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-define-resource-servers.html
+- https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html

@@ -2,6 +2,11 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: AQP-SOLIDARIA - donaciones simuladas, sin pagos reales
 Parameters:
+  ApiAudience:
+    Type: String
+    Default: https://aqp-solidaria.example/api
+    AllowedPattern: '^https://[A-Za-z0-9.-]+/[^ ]+$'
+    Description: Indicador de recurso para access tokens; distinto del ID del app client
   Stage:
     Type: String
     Default: academic
@@ -23,6 +28,7 @@ Globals:
       Variables:
         STAGE: !Ref Stage
         COGNITO_CLIENT_ID: !Ref UserPoolClient
+        API_AUDIENCE: !Ref ApiAudience
         PROJECTS_TABLE: !Ref Projects
         DONATIONS_TABLE: !Ref Donations
         IDEMPOTENCY_TABLE: !Ref Idempotency
@@ -168,7 +174,7 @@ Resources:
             IdentitySource: $request.header.Authorization
             JwtConfiguration:
               issuer: !Sub 'https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}'
-              audience: [!Ref UserPoolClient]
+              audience: [!Ref ApiAudience]
   ApiLogs:
     Type: AWS::Logs::LogGroup
     Properties: { RetentionInDays: 14 }

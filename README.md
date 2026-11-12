@@ -18,6 +18,7 @@ Abre http://127.0.0.1:5173. Sin configuración cloud se muestra un catálogo de 
 - Catálogo público, detalle, búsqueda entre proyectos cargados, orden por avance, formato PEN y paginación.
 - Interfaz adaptable, estados de carga/error/vacío, enlace de salto y foco de navegación.
 - Cognito Authorization Code + PKCE, tokens en memoria, revocación de refresh token y cierre de sesión.
+- Resource binding: audiencia de API distinta del app client para rechazar ID tokens antes de evaluar scopes; validación adicional de client_id en Lambda.
 - Backend con roles, scopes, propietario, validaciones estrictas y errores sin detalles internos.
 - Intenciones idempotentes durante 24 horas y confirmación/rechazo condicionados con transacciones DynamoDB.
 - Historial privado, creación de borradores, publicación y eventos de auditoría atómicos.
@@ -75,6 +76,8 @@ Copia `frontend/.env.example` a `frontend/.env.local` y completa con los outputs
 | `VITE_COGNITO_AUTHORITY` | `CognitoAuthority` |
 | `VITE_COGNITO_CLIENT_ID` | `CognitoClientId` |
 | `VITE_COGNITO_DOMAIN` | `CognitoDomain` |
+
+`VITE_API_AUDIENCE` es opcional si se conserva el valor `https://aqp-solidaria.example/api`, igual al parámetro SAM `ApiAudience`. Si se cambia uno, cambiar también el otro. Es un identificador de audiencia, no un dominio que deba registrarse. Después de desplegar esta configuración, cerrar las sesiones anteriores e iniciar sesión nuevamente: los tokens emitidos antes de solicitar resource binding no tienen la nueva audiencia. No relajar el authorizer aceptando también el client ID, porque los ID tokens volverían a superar la comprobación de audiencia.
 
 Estas variables son configuración pública de la aplicación, no claves secretas. Nunca introduzcas un client secret ni credenciales AWS. Reinicia Vite después de cambiarlas.
 
