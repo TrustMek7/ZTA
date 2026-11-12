@@ -1,5 +1,8 @@
 node_modules/
 dist/
+dist-backend/
+playwright-report/
+test-results/
 coverage/
 .aws-sam/
 .env
@@ -7,3 +10,5 @@ coverage/
 !.env.example
 *.local
 *.log
+.tools/
+.artifacts/

@@ -8,9 +8,11 @@
   },
   "scripts": {
     "dev": "vite --config frontend/vite.config.ts",
-    "build": "tsc --noEmit && vite build --config frontend/vite.config.ts",
+    "build": "tsc --noEmit && vite build --config frontend/vite.config.ts && npm run build:backend",
+    "build:backend": "node scripts/build-backend.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "lint": "eslint .",
     "check": "npm run lint && npm run typecheck && npm test && npm run build"
   },
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.0",
     "@tailwindcss/vite": "4.3.5",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",

@@ -1,0 +1,29 @@
+name: Quality
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm }
+      - run: npm ci
+      - run: npm run check
+      - run: npm audit --audit-level=moderate
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        with: { name: frontend, path: dist, retention-days: 7 }
+  infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm }
+      - uses: aws-actions/setup-sam@v2
+      - run: npm ci
+      - run: npm run build:backend
+      - run: sam validate --lint --template-file infra/template.yaml --region us-east-1
+      - run: sam build --template-file infra/template.yaml
