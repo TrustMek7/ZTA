@@ -45,3 +45,7 @@ Esto corrige la premisa del diseño inicial de que los access tokens nunca inclu
 - https://docs.aws.amazon.com/cognito/latest/developerguide/authorization-endpoint.html
 - https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-define-resource-servers.html
 - https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html
+
+
+## Correcci?n de autenticaci?n del 12 de noviembre
+La prueba real mostr? access tokens sin aud y client_id correcto. La configuraci?n de resource binding provoc? 401 para todos los roles. Se restaura Cognito Lite y la audiencia JWT del app client. Gateway conserva verificaci?n criptogr?fica, emisor y vigencia. Los scopes se comprueban obligatoriamente en cada Lambda junto con token_use=access, client_id y rol; se quita el filtro de scopes de Gateway para que los ID tokens reciban 401 desde Lambda (antes Gateway respond?a 403). Ninguna ruta privada queda p?blica. No se cambia el plan ni se agregan recursos de login. Validar en AWS tras despliegue: auditor GET audit=200, ID token=401, donante sin permiso audit=403.

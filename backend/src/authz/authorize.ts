@@ -15,7 +15,7 @@ export function authorize(event: APIGatewayProxyEventV2WithJWTAuthorizer, role: 
   const claims = event.requestContext.authorizer?.jwt?.claims;
   if (!claims || typeof claims.sub !== 'string' || claims.token_use !== 'access' ||
       !process.env.COGNITO_CLIENT_ID || claims.client_id !== process.env.COGNITO_CLIENT_ID ||
-      !process.env.API_AUDIENCE || claims.aud !== process.env.API_AUDIENCE ||
+      (claims.aud !== undefined && claims.aud !== process.env.COGNITO_CLIENT_ID) ||
       Number(claims.exp) <= Date.now() / 1000 || !Number.isFinite(Number(claims.exp))) {
     throw new ApiError(401, 'UNAUTHORIZED', 'Inicia sesión nuevamente para continuar.');
   }

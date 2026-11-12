@@ -77,7 +77,7 @@ Copia `frontend/.env.example` a `frontend/.env.local` y completa con los outputs
 | `VITE_COGNITO_CLIENT_ID` | `CognitoClientId` |
 | `VITE_COGNITO_DOMAIN` | `CognitoDomain` |
 
-`VITE_API_AUDIENCE` es opcional si se conserva el valor `https://aqp-solidaria.example/api`, igual al parámetro SAM `ApiAudience`. Si se cambia uno, cambiar también el otro. Es un identificador de audiencia, no un dominio que deba registrarse. Después de desplegar esta configuración, cerrar las sesiones anteriores e iniciar sesión nuevamente: los tokens emitidos antes de solicitar resource binding no tienen la nueva audiencia. No relajar el authorizer aceptando también el client ID, porque los ID tokens volverían a superar la comprobación de audiencia.
+El authorizer JWT valida firma, emisor, expiraci?n y el app client de Cognito (client_id cuando aud est? ausente). Cada Lambda protegida exige token_use=access, client_id, expiraci?n, scope de la operaci?n y rol. Los ID tokens se rechazan con 401 en Lambda. No se solicita resource binding; se conserva Cognito Lite.
 
 Estas variables son configuración pública de la aplicación, no claves secretas. Nunca introduzcas un client secret ni credenciales AWS. Reinicia Vite después de cambiarlas.
 

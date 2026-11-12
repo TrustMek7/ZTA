@@ -28,7 +28,7 @@ class AcademicSimulationTest(unittest.TestCase):
         self.assertEqual(condition, "IsAcademic")
         self.assertEqual(disabled, {"Ref": "AWS::NoValue"})
         self.assertNotIn("Fn::If", str(enabled))
-        self.assertEqual(enabled["post"]["security"], [{"Cognito": ["api/donations.write"]}])
+        self.assertEqual(enabled["post"]["security"], [{"Cognito": []}])
         self.assertEqual(enabled["post"]["x-amazon-apigateway-integration"]["payloadFormatVersion"], "2.0")
         self.assertIn("get", paths["/v1/projects"])
         self.assertIn("post", paths["/v1/donations"])
@@ -50,16 +50,15 @@ class AcademicSimulationTest(unittest.TestCase):
         self.assertEqual(permission["FunctionName"], {"Ref": "Simulate"})
         self.assertTrue(permission["SourceArn"]["Fn::Sub"].endswith("${Api}/${Stage}/POST/v1/donations/*/simulate"))
 
-    def test_api_audience_is_distinct_from_client_id_and_scopes_remain_required(self):
+    def test_jwt_verification_remains_on_private_routes(self):
         template = self.transformed("academic")
         body = template["Resources"]["Api"]["Properties"]["Body"]
         jwt = body["components"]["securitySchemes"]["Cognito"]["x-amazon-apigateway-authorizer"]["jwtConfiguration"]
-        self.assertEqual(jwt["audience"], [{"Ref": "ApiAudience"}])
-        self.assertEqual(template["Parameters"]["ApiAudience"]["Default"], "https://aqp-solidaria.example/api")
-        self.assertEqual(body["paths"]["/v1/donations/me"]["get"]["security"], [{"Cognito": ["api/donations.read"]}])
-        env = template["Resources"]["History"]["Properties"]["Environment"]["Variables"]
-        self.assertEqual(env["API_AUDIENCE"], {"Ref": "ApiAudience"})
-        self.assertEqual(env["COGNITO_CLIENT_ID"], {"Ref": "UserPoolClient"})
+        self.assertEqual(jwt["audience"], [{"Ref": "UserPoolClient"}])
+        for path, method in [("/v1/donations/me", "get"), ("/v1/audit", "get"), ("/v1/projects", "post")]:
+            self.assertEqual(body["paths"][path][method]["security"], [{"Cognito": []}])
+        self.assertEqual(body["paths"]["/v1/projects"]["get"]["security"], [{"NONE": []}])
+        self.assertEqual(template["Resources"]["UserPool"]["Properties"]["UserPoolTier"], "LITE")
 
 
 if __name__ == "__main__":

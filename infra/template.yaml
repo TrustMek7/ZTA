@@ -84,7 +84,9 @@ Resources:
       ExplicitAuthFlows: [ALLOW_REFRESH_TOKEN_AUTH]
   CognitoDomain:
     Type: AWS::Cognito::UserPoolDomain
-    Properties: { Domain: !Ref CognitoDomainPrefix, UserPoolId: !Ref UserPool }
+    Properties:
+      Domain: !Ref CognitoDomainPrefix
+      UserPoolId: !Ref UserPool
   DonorGroup:
     Type: AWS::Cognito::UserPoolGroup
     Properties: { UserPoolId: !Ref UserPool, GroupName: DONANTE }
@@ -151,7 +153,7 @@ Resources:
             Fn::If:
               - IsAcademic
               - post:
-                  security: [{ Cognito: [api/donations.write] }]
+                  security: [{ Cognito: [] }]
                   responses: {}
                   x-amazon-apigateway-integration:
                     type: aws_proxy
@@ -174,7 +176,7 @@ Resources:
             IdentitySource: $request.header.Authorization
             JwtConfiguration:
               issuer: !Sub 'https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}'
-              audience: [!Ref ApiAudience]
+              audience: [!Ref UserPoolClient]
   ApiLogs:
     Type: AWS::Logs::LogGroup
     Properties: { RetentionInDays: 14 }
@@ -200,8 +202,8 @@ Resources:
             - { Effect: Allow, Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem], Resource: !GetAtt Projects.Arn }
             - { Effect: Allow, Action: dynamodb:PutItem, Resource: !GetAtt AuditEvents.Arn }
       Events:
-        Create: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/projects, Method: POST, Auth: { AuthorizationScopes: [api/projects.write] } } }
-        Publish: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: '/v1/projects/{projectId}/publish', Method: PATCH, Auth: { AuthorizationScopes: [api/projects.write] } } }
+        Create: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/projects, Method: POST } }
+        Publish: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: '/v1/projects/{projectId}/publish', Method: PATCH } }
   CreateDonation:
     Type: AWS::Serverless::Function
     Properties:
@@ -212,7 +214,7 @@ Resources:
             - { Effect: Allow, Action: [dynamodb:GetItem, dynamodb:PutItem], Resource: !GetAtt Idempotency.Arn }
             - { Effect: Allow, Action: dynamodb:PutItem, Resource: [!GetAtt Donations.Arn, !GetAtt AuditEvents.Arn] }
       Events:
-        Create: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/donations, Method: POST, Auth: { AuthorizationScopes: [api/donations.write] } } }
+        Create: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/donations, Method: POST } }
   History:
     Type: AWS::Serverless::Function
     Properties:
@@ -222,8 +224,8 @@ Resources:
             - { Effect: Allow, Action: dynamodb:GetItem, Resource: !GetAtt Donations.Arn }
             - { Effect: Allow, Action: dynamodb:Query, Resource: !Sub '${Donations.Arn}/index/donorSub-createdAt' }
       Events:
-        List: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/donations/me, Method: GET, Auth: { AuthorizationScopes: [api/donations.read] } } }
-        Detail: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: '/v1/donations/{donationId}', Method: GET, Auth: { AuthorizationScopes: [api/donations.read] } } }
+        List: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/donations/me, Method: GET } }
+        Detail: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: '/v1/donations/{donationId}', Method: GET } }
   Simulate:
     Type: AWS::Serverless::Function
     Condition: IsAcademic
@@ -250,7 +252,7 @@ Resources:
         - Statement:
             - { Effect: Allow, Action: dynamodb:Query, Resource: !GetAtt AuditEvents.Arn }
       Events:
-        List: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/audit, Method: GET, Auth: { AuthorizationScopes: [api/audit.read] } } }
+        List: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: /v1/audit, Method: GET } }
   PublicLogs:
     Type: AWS::Logs::LogGroup
     Properties: { LogGroupName: !Sub '/aws/lambda/${PublicProjects}', RetentionInDays: 14 }
