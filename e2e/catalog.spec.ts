@@ -1,0 +1,30 @@
+import { expect, test } from '@playwright/test';
+test('catálogo y detalle funcionan sin desbordamiento ni sesión ficticia', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('oportunidades');
+  await expect(page.getByRole('article')).toHaveCount(3);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: `evidence/catalog-${info.project.name}.png`, fullPage: true });
+  await page.getByRole('textbox', { name: 'Buscar en los proyectos cargados' }).fill('aprender');
+  await expect(page.getByRole('article')).toHaveCount(1);
+  await page.getByRole('link', { name: 'Conoce el proyecto' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Más oportunidades para aprender');
+  await expect(page.getByRole('heading', { name: 'Un vistazo al prototipo' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: `evidence/detail-${info.project.name}.png`, fullPage: true });
+  await expect(page.getByRole('button', { name: 'Registrar aporte simulado' })).toHaveCount(0);
+  await page.getByRole('link', { name: 'Transparencia', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Sin cobros, sin datos bancarios.' })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+test('el enlace de salto es accesible con teclado y las rutas privadas están protegidas', async ({ page }) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Saltar al contenido' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main-content')).toBeFocused();
+  await page.goto('/mis-donaciones');
+  await expect(page.getByRole('heading', { name: 'Inicia sesión para continuar' })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.length)).toBe(0);
+});

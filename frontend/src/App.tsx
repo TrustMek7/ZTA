@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowUpRight, HeartHandshake, ShieldCheck } from 'lucide-react';
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Auth, useAuth } from './auth/Auth';
@@ -15,10 +15,13 @@ export default function App() { return <BrowserRouter><Auth><Layout /></Auth></B
 function Layout() {
   const { user, groups } = useAuth(); const [error, setError] = useState<Error>();
   const location = useLocation();
+  const previousLocation = useRef(location.pathname + location.hash);
   useEffect(() => {
     if (location.hash) requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView());
     else window.scrollTo(0, 0);
-    document.getElementById('main-content')?.focus({ preventScroll: true });
+    const key = location.pathname + location.hash;
+    if (previousLocation.current !== key) document.getElementById('main-content')?.focus({ preventScroll: true });
+    previousLocation.current = key;
   }, [location.pathname, location.hash]);
   return <><a className="skip-link" href="#main-content">Saltar al contenido</a><div className="academic-banner"><ShieldCheck size={14} /><span>Simulación académica: no se ha realizado ningún cobro</span></div><header className="site-header"><div className="container header-inner"><Link to="/" className="brand" aria-label="AQP-SOLIDARIA, inicio"><strong>AQP<span>—</span>SOLIDARIA<span className="brand-dot">.</span></strong><span>COMPARTIR NOS HACE COMUNIDAD</span></Link><nav aria-label="Navegación principal"><NavLink to="/" end>Proyectos</NavLink><Link to="/#como-funciona">Cómo funciona</Link><NavLink to="/transparencia">Transparencia</NavLink>{groups.includes('DONANTE') && <NavLink to="/mis-donaciones">Mis donaciones</NavLink>}{groups.includes('GESTOR') && <NavLink to="/gestion">Gestión</NavLink>}{groups.includes('AUDITOR') && <NavLink to="/auditoria">Auditoría</NavLink>}</nav><button className="button header-login" onClick={() => { if (user) void logout().catch(setError); else if (authConfigured && configured) void login()?.catch(setError); else setError(new Error('El inicio de sesión estará disponible cuando se configure Amazon Cognito y la API del entorno académico.')); }}>{user ? 'Cerrar sesión' : 'Iniciar sesión'}<ArrowUpRight size={16} /></button></div></header>{error && <div className="container"><ErrorBox error={error} /><button className="text-link" onClick={() => setError(undefined)}>Cerrar aviso</button></div>}<main id="main-content" tabIndex={-1}><Routes><Route path="/" element={<Catalog />} /><Route path="/proyectos/:id" element={<ProjectDetail />} /><Route path="/mis-donaciones" element={<Guard role="DONANTE"><History /></Guard>} /><Route path="/gestion" element={<Guard role="GESTOR"><Manage /></Guard>} /><Route path="/auditoria" element={<Guard role="AUDITOR"><Audit /></Guard>} /><Route path="/auth/callback" element={<Callback />} /><Route path="/transparencia" element={<Transparency />} /><Route path="*" element={<div className="container page"><h1>Página no encontrada.</h1><Link className="button" to="/">Volver al inicio</Link></div>} /></Routes></main><footer><div className="container footer-top"><div><Link to="/" className="brand"><strong>AQP<span>—</span>SOLIDARIA.</strong></Link><p>Una ciudad más solidaria<br />empieza con nosotros.</p></div><HeartHandshake size={60} strokeWidth={1} /><div><strong>Hecho para aprender.<br />Pensado para compartir.</strong><p>Prototipo académico · EPIS, UNSA<br />Arequipa, Perú</p></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} AQP-SOLIDARIA · Fundación ficticia</span><Link to="/transparencia">Acerca de esta simulación <ArrowUpRight size={13} /></Link></div></footer></>;
 }
