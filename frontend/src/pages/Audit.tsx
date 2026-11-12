@@ -1,0 +1,8 @@
+import { useState } from 'react';
+import { api } from '../services/api';
+import { Empty, ErrorBox, Loading, useResource } from '../components/common';
+export function Audit() {
+  const [type, setType] = useState('PROJECT_CREATED'); const [cursor, setCursor] = useState<string>();
+  const resource = useResource(() => api.audit(type, cursor), [type, cursor]);
+  return <div className="container page"><span className="eyebrow">TRAZABILIDAD</span><h1 className="page-title">Registro de auditoría.</h1><label className="sort">Tipo de evento <select value={type} onChange={e => { setType(e.target.value); setCursor(undefined); }}>{[['PROJECT_CREATED', 'Proyecto creado'], ['PROJECT_PUBLISHED', 'Proyecto publicado'], ['DONATION_CREATED', 'Intención registrada'], ['DONATION_CONFIRMED', 'Simulación confirmada'], ['DONATION_REJECTED', 'Simulación rechazada']].map(([v, l]) => <option value={v} key={v}>{l}</option>)}</select></label>{resource.loading ? <Loading /> : resource.error ? <ErrorBox error={resource.error} retry={resource.reload} /> : !resource.data?.items.length ? <Empty>No hay eventos de este tipo.</Empty> : resource.data.items.map(event => <article className="audit-row" key={event.eventId}><strong>{event.action}</strong><time>{event.timestamp}</time><code>Recurso: {event.resourceRef}</code><code>Actor seudonimizado: {event.actorRef}</code><small>Resultado: {event.outcome} · Solicitud: {event.requestId}</small></article>)}{resource.data?.nextCursor && <button className="button secondary" onClick={() => setCursor(resource.data!.nextCursor)}>Página siguiente</button>}{cursor && <button className="button secondary" onClick={() => setCursor(undefined)}>Primera página</button>}</div>;
+}
