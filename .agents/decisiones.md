@@ -18,7 +18,16 @@ Se adopta su propuesta «Sillar»: fondo cálido, superficies claras, verde prof
 - Las versiones publicadas se verifican en npm y se fijan en el lockfile. Se prioriza compatibilidad con Node local 22.14; las referencias de versiones en design.md no se asumen instalables.
 - El usuario autorizó commits locales progresivos en este repositorio; no se harán push ni despliegues. La revisión humana y los PR requeridos para la entrega académica quedan pendientes.
 
-## Referencias consultadas
+## Compatibilidad de SAM al preparar el despliegue
+
+El usuario ejecutó SAM 1.166.2: el empaquetado pasó, pero el lint informó W1028 por las condiciones idénticas anidadas que SAM genera para un evento HTTP de una función condicional. Se reemplazó únicamente ese evento implícito por una ruta OpenAPI con un solo `Fn::If IsAcademic` y un permiso Lambda explícito, también condicionado y acotado a la ruta. Se conservan el authorizer Cognito, el scope y el bloqueo del handler fuera de academic. No se desactivan reglas de lint ni se habilita simulación en otros stages. Se agregaron comprobaciones offline sobre la plantilla transformada y CI con el traductor 1.113.0 usado por SAM 1.166.2.
+
+Referencias de infraestructura:
+
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigatewayv2-integration.html
+- https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
+
+Referencias generales:
 
 - https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-httpapi-oauth2authorizer.html
 - https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-controlling-access-to-apis.html

@@ -135,6 +135,24 @@ Resources:
     Type: AWS::Serverless::HttpApi
     Properties:
       StageName: !Ref Stage
+      # Define the conditional path once. A conditional SAM Function event
+      # generates nested identical Fn::If expressions in older translators.
+      DefinitionBody:
+        openapi: 3.0.1
+        info: { title: AQP-SOLIDARIA, version: '0.1.0' }
+        paths:
+          /v1/donations/{donationId}/simulate:
+            Fn::If:
+              - IsAcademic
+              - post:
+                  security: [{ Cognito: [api/donations.write] }]
+                  responses: {}
+                  x-amazon-apigateway-integration:
+                    type: aws_proxy
+                    httpMethod: POST
+                    payloadFormatVersion: '2.0'
+                    uri: !Sub 'arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Simulate.Arn}/invocations'
+              - !Ref AWS::NoValue
       DefaultRouteSettings: { ThrottlingBurstLimit: 20, ThrottlingRateLimit: 10 }
       AccessLogSettings:
         DestinationArn: !GetAtt ApiLogs.Arn
@@ -210,8 +228,14 @@ Resources:
             - { Effect: Allow, Action: [dynamodb:GetItem, dynamodb:UpdateItem], Resource: !GetAtt Donations.Arn }
             - { Effect: Allow, Action: dynamodb:UpdateItem, Resource: !GetAtt Projects.Arn }
             - { Effect: Allow, Action: dynamodb:PutItem, Resource: !GetAtt AuditEvents.Arn }
-      Events:
-        Simulate: { Type: HttpApi, Properties: { ApiId: !Ref Api, Path: '/v1/donations/{donationId}/simulate', Method: POST, Auth: { AuthorizationScopes: [api/donations.write] } } }
+  SimulationInvokePermission:
+    Type: AWS::Lambda::Permission
+    Condition: IsAcademic
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref Simulate
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/${Stage}/POST/v1/donations/*/simulate'
   Audit:
     Type: AWS::Serverless::Function
     Properties:

@@ -8,6 +8,8 @@ Resultado del avance: 39 pruebas unitarias/de componentes y 4 pruebas de navegad
 
 Capturas del catálogo y detalle a 1440 y 375 px en este directorio. No contienen datos de cuentas ni donantes reales. No constituyen evidencia de despliegue.
 
+Corrección posterior: se agregaron 3 pruebas offline de la plantilla transformada para evitar condiciones redundantes en la ruta de simulación (W1028 con SAM 1.166.2), mantener el scope Cognito y comprobar que ruta, función, rol, permiso de invocación y logs dependen de `IsAcademic`. Ejecutables con `python -m unittest discover -s infra -p 'test_*.py'` en un entorno Python con aws-sam-translator instalado.
+
 - `npm run check`: lint, TypeScript, pruebas de backend y UI, build del frontend.
 - `npm audit --audit-level=moderate`: revisión del árbol de dependencias.
 - `sam validate --lint -t infra/template.yaml`: verificación estática de plantilla.
