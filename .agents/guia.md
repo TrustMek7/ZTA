@@ -25,3 +25,10 @@ Todos los commits deben usar únicamente la identidad Git configurada por el usu
 9. `test: verificar flujos y documentar operación` — comprobaciones relevantes, instrucciones y limitaciones.
 
 Cada commit debe corresponder a un avance revisable. Ajustar este plan después de leer la documentación y registrar las razones. No incluir secretos ni afirmar que una integración está operativa sin verificarla.
+
+## Avance de implementación
+
+- La interfaz de catálogo, identidad, donaciones, historial y gestión se agrupó en un commit porque comparte navegación y tipos; la API se separó en otro commit con pruebas de permisos e integridad.
+- Se mantiene AWS tras la preparación de la cuenta por el usuario. Región reportada: us-east-1; acceso nuevo por Builder ID, MFA TOTP registrado según captura del usuario. Esto no verifica todavía IAM ni MFA de Cognito.
+- No se copian capturas de la cuenta al repositorio. Las capturas de evidence/ corresponden solo a la aplicación con datos ficticios.
+- Se preparan infraestructura/CI y documentación/evidencias como avances separados. No se hace push ni se invoca la cuenta AWS desde herramientas.
