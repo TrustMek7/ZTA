@@ -14,3 +14,9 @@ coverage/
 .artifacts/
 __pycache__/
 *.pyc
+*.tsbuildinfo
+*.tmp
+*.wbk
+~$*.docx
+.~lock.*#
+docs/informe/*.zip
